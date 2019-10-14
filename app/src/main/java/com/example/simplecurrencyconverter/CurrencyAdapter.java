@@ -43,10 +43,11 @@ public class CurrencyAdapter extends BaseAdapter {
         View currencyItemView = layoutInflater.inflate(R.layout.currency_item, null);
         TextView tvName = (TextView) currencyItemView.findViewById(R.id.tvName);
         TextView tvRate = (TextView) currencyItemView.findViewById(R.id.tvRate);
-
+        TextView time = (TextView) currencyItemView.findViewById(R.id.time);
         final Currency c = currencyList.get(i);
         tvName.setText(c.getName());
         tvRate.setText(Double.toString(c.getRate()));
+        //time.setText(c.);
 
         currencyItemView.setOnClickListener(new View.OnClickListener() {
             @Override
