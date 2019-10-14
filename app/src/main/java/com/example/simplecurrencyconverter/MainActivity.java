@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements Callback<Currency
 
     @Override
     public void onResponse(Call<CurrencyExchange> call, Response<CurrencyExchange> response) {
-        //Toast.makeText(this, response.body().getBase(), Toast.LENGTH_LONG).show();
+
         CurrencyExchange currencyExchange = response.body();
         lvCurrency.setAdapter(new CurrencyAdapter(this, currencyExchange.getCurrencyList(), this));
     }
@@ -53,11 +53,6 @@ public class MainActivity extends AppCompatActivity implements Callback<Currency
 
     @Override
     public void onCurrencyItemClick(Currency c) {
-        //Toast.makeText(this, c.getName(), Toast.LENGTH_LONG).show();
-       // Intent intent = new Intent(this, SecondActivity.class);
-       // intent.putExtra("currency_name", c.getName());
-       // intent.putExtra("currency_rate", c.getRate());
-
-        //startActivity(intent);
+        //TODO forgetting
     }
 }
