@@ -1,55 +1,63 @@
 package com.example.simplecurrencyconverter;
 
 import android.os.Bundle;
-import android.util.Log;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Callback<CurrencyExchange>, CurrencyItemClickListener {
 
-    private KisilerDaoInterface kisilerDIF;
-
+    private ListView lvCurrency;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        kisilerDIF = ApiUtils.getKisilerDaoInterface();
-        tumKisiler();
+        lvCurrency = (ListView) findViewById(R.id.lvCurrency);
     }
 
-    public void tumKisiler() {
-
-
-        kisilerDIF.tumKisiler().enqueue(new Callback<KisilerCevap>() {
-            @Override
-            public void onResponse(Call<KisilerCevap> call, Response<KisilerCevap> response) {
-                List<Kisiler> kisilerListe = response.body().getKisiler();
-
-                for (Kisiler k : kisilerListe) {
-                    Log.e("**********", "**********");
-                    Log.e("kişi id:", k.getKisiId());
-                    Log.e("kişi ad:", k.getKisiAd());
-                    Log.e("kişi tel:", k.getKisiTel());
-                    Log.e("**********", "**********");
-
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<KisilerCevap> call, Throwable t) {
-
-            }
-        });
-
+    @Override
+    protected void onStart() {
+        super.onStart();
+        loadCurrencyExchangeData();
     }
 
+    private void loadCurrencyExchangeData(){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://data.fixer.io/api/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
+        CurrencyExchangeService service = retrofit.create(CurrencyExchangeService.class);
+        Call<CurrencyExchange> call = service.loadCurrencyExchange();
+        call.enqueue(this);
+    }
+
+    @Override
+    public void onResponse(Call<CurrencyExchange> call, Response<CurrencyExchange> response) {
+        //Toast.makeText(this, response.body().getBase(), Toast.LENGTH_LONG).show();
+        CurrencyExchange currencyExchange = response.body();
+        lvCurrency.setAdapter(new CurrencyAdapter(this, currencyExchange.getCurrencyList(), this));
+    }
+
+    @Override
+    public void onFailure(Call<CurrencyExchange> call, Throwable t) {
+        Toast.makeText(this, t.getMessage(), Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onCurrencyItemClick(Currency c) {
+        //Toast.makeText(this, c.getName(), Toast.LENGTH_LONG).show();
+       // Intent intent = new Intent(this, SecondActivity.class);
+       // intent.putExtra("currency_name", c.getName());
+       // intent.putExtra("currency_rate", c.getRate());
+
+        //startActivity(intent);
+    }
 }

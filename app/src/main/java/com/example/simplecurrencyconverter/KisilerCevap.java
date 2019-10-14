@@ -1,33 +1,25 @@
 
 package com.example.simplecurrencyconverter;
 
-import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class KisilerCevap {
 
-    @SerializedName("kisiler")
+    @SerializedName("rates")
     @Expose
-    private List<Kisiler> kisiler = null;
-    @SerializedName("success")
-    @Expose
-    private Integer success;
+    private List<Rates> kisiler = null;
 
-    public List<Kisiler> getKisiler() {
+
+    public List<Rates> getKisiler() {
         return kisiler;
     }
 
-    public void setKisiler(List<Kisiler> kisiler) {
+    public void setKisiler(List<Rates> kisiler) {
         this.kisiler = kisiler;
     }
 
-    public Integer getSuccess() {
-        return success;
-    }
-
-    public void setSuccess(Integer success) {
-        this.success = success;
-    }
 
 }
