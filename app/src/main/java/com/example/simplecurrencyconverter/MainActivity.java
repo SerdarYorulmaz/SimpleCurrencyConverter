@@ -1,6 +1,7 @@
 package com.example.simplecurrencyconverter;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -40,24 +41,24 @@ public class MainActivity extends AppCompatActivity implements Callback<Currency
     private static Retrofit getClient() {
 
         if (retrofit == null) {
-            retrofit= new Retrofit.Builder()
+            retrofit = new Retrofit.Builder()
                     .baseUrl(Base_Url)
                     .client(provideOkHttpClient())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
-            return  retrofit;
+            return retrofit;
         }
-        return  retrofit;
+        return retrofit;
     }
-    private  static OkHttpClient provideOkHttpClient() {
+
+    private static OkHttpClient provideOkHttpClient() {
         OkHttpClient.Builder okhttpClientBuilder = new OkHttpClient.Builder();
         okhttpClientBuilder.connectTimeout(30, TimeUnit.SECONDS);
         okhttpClientBuilder.readTimeout(30, TimeUnit.SECONDS);
-        okhttpClientBuilder.writeTimeout(30,TimeUnit.SECONDS);
+        okhttpClientBuilder.writeTimeout(30, TimeUnit.SECONDS);
 
         return okhttpClientBuilder.build();
     }
-
 
 
     private void loadCurrencyExchangeData() {
@@ -75,11 +76,14 @@ public class MainActivity extends AppCompatActivity implements Callback<Currency
 
         CurrencyExchange currencyExchange = response.body();
         lvCurrency.setAdapter(new CurrencyAdapter(this, currencyExchange.getCurrencyList(), this));
+
+
     }
 
     @Override
     public void onFailure(Call<CurrencyExchange> call, Throwable t) {
         Toast.makeText(this, t.getMessage(), Toast.LENGTH_LONG).show();
+
     }
 
     @Override
